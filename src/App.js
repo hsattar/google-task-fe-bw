@@ -4,7 +4,8 @@ import { HiOutlinePlusSm } from "react-icons/hi";
 import { BsJournalPlus } from "react-icons/bs";
 import { Dropdown } from "./components/Dropdown/Dropdown";
 import { SingleTask } from "./components/SingleTask/SingleTask";
-import { Modal } from "./components/Modal/Modal";
+import { Modal as LKModal } from "./components/Modal/Modal";
+import { Modal, Button } from 'react-bootstrap'
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -12,6 +13,11 @@ function App() {
   const [open, setOpen] = useState(false);
   const [openPlanner, setOpenPlanner] = useState(false);
   const [selected, setSelected] = useState("");
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [plannerName, setPlannerName] = useState('')
 
   const getTasks = async () => {
     try {
@@ -58,6 +64,23 @@ function App() {
     }
   }
 
+  const handleEditPlanner = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/planner/${selected}`, {
+        method: 'PUT',
+        body: JSON.stringify({ name: plannerName}),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      if (!response.ok) throw new Error('Delete Failed')
+      handleClose()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getTasks();
     getPlanners();
@@ -69,6 +92,7 @@ function App() {
         <img src="/assets/logo.png" alt="logo" />
         <div className="app__header">
           {selected !== "" && <small onClick={handleDeletePlanner}>Delete planner</small>}
+          {selected !== "" && <small onClick={handleShow}>Edit planner</small>}
           <div className="app__buttons">
             <Dropdown
               planners={planners}
@@ -90,8 +114,19 @@ function App() {
           return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} />;
         })}
       </div>
-      <Modal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} />
-      <Modal type="planner" isOpen={openPlanner} close={() => setOpenPlanner(false)} />
+      <LKModal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} />
+      <LKModal type="planner" isOpen={openPlanner} close={() => setOpenPlanner(false)} />
+
+      <Modal show={show} onHide={handleClose}>
+      <Modal.Body>
+        <form onSubmit={handleEditPlanner}>
+          <input type="text" value={plannerName} onChange={e => setPlannerName(e.target.value)}/>
+          <Button type="submit" variant="primary" style={{display: "none"}}>
+            Submit
+          </Button>
+        </form>
+      </Modal.Body>
+    </Modal>
     </>
   );
 }
