@@ -12,6 +12,8 @@ function App() {
   const [planners, setPlanners] = useState([]);
   const [open, setOpen] = useState(false);
   const [openPlanner, setOpenPlanner] = useState(false);
+  
+  // SELECTED BELOW MEANS THE PLANNER ID
   const [selected, setSelected] = useState("");
 
   const [show, setShow] = useState(false);

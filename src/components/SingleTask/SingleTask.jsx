@@ -28,12 +28,6 @@ export const SingleTask = ({ task, id, setDone }) => {
       console.log(error)
     }
   }
-
-  // TODO: MANSI
-  // PUT AND DELETE FOR TASKS IN HERE
-
-  // END OF PUT AND DELETE
-  //
   useEffect(() => {
     if (isChecked) {
       //if the task has been marked as done
