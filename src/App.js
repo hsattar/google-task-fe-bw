@@ -13,11 +13,9 @@ function App() {
   const [openPlanner, setOpenPlanner] = useState(false);
   const [selected, setSelected] = useState("");
 
-  // TODO: ROBY
-  // FETCHING FOR TASKS - GET
   const getTasks = async () => {
     try {
-      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/tasks");
+      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks`);
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setTasks(data);
@@ -26,9 +24,6 @@ function App() {
       console.log(error);
     }
   };
-
-  // TODO: ASADBEK
-  // FETCHING FOR PLANNERS - GET
 
   const getPlanners = async () => {
     try {
@@ -52,20 +47,28 @@ function App() {
     }
   };
 
-  // TODO: ROBY
-  // FETCH FOR SEARCH
+  const handleDeletePlanner = async () => {
+    try {
+      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/planner/${selected}`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Delete Failed')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     getTasks();
     getPlanners();
-  }, []);
+  }, [selected]);
 
   return (
     <>
       <div className="app__wrap">
         <img src="/assets/logo.png" alt="logo" />
         <div className="app__header">
-          {selected !== "" && <small>Delete planner</small>}
+          {selected !== "" && <small onClick={handleDeletePlanner}>Delete planner</small>}
           <div className="app__buttons">
             <Dropdown
               planners={planners}
