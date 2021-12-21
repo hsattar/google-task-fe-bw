@@ -3,20 +3,20 @@ import { BsCircle, BsCheckCircle } from "react-icons/bs";
 import { useEffect, useState } from "react";
 
 export const SingleTask = ({ task, id, setDone }) => {
-  const [isChecked, setChecked] = useState(false);
   console.log({ task, id });
+  const [isChecked, setChecked] = useState(false);
 
   // TODO: MANSI
   // PUT AND DELETE FOR TASKS IN HERE
 
   // END OF PUT AND DELETE
-
+  //
   useEffect(() => {
     if (isChecked) {
       //if the task has been marked as done
-      setTimeout(() => {
-        setDone(id);
-      }, 500);
+      // setTimeout(() => {
+      setDone(id);
+      // }, 500);
       console.log("isChecked");
     }
   }, [isChecked]);

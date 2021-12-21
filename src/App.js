@@ -42,6 +42,17 @@ function App() {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3001/tasks/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Delete Failed");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // TODO: ROBY
   // FETCH FOR SEARCH
 
@@ -74,7 +85,7 @@ function App() {
         </div>
 
         {tasks?.map((task) => {
-          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={() => {}} />;
+          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} />;
         })}
       </div>
       <Modal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} />
