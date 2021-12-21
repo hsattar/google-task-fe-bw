@@ -18,6 +18,7 @@ export const SingleTask = ({ task, id, setDone }) => {
       setDone(id);
       // }, 500);
       console.log("isChecked");
+      // setChecked(!isChecked)
     }
   }, [isChecked]);
 

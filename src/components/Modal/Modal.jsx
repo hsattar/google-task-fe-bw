@@ -2,14 +2,14 @@ import { useState } from "react";
 import "./Modal.css";
 
 export const Modal = ({ isOpen, close, type, planners }) => {
-  const [select, setSelect] = useState([]);
+  const [select, setSelect] = useState(null);
   const [task, setTask] = useState([]);
 
   const postTask = async (task) => {
     try {
       const response = await fetch("http://localhost:3001/tasks", {
         method: "POST",
-        body: JSON.stringify({ task: task, plannerId: "f9ac36a8-2591-453e-923b-d6b93a8d9523" }),
+        body: JSON.stringify({ task, plannerId: select }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -17,6 +17,25 @@ export const Modal = ({ isOpen, close, type, planners }) => {
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setTask(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const postPlanner = async (name) => {
+    try {
+      const response = await fetch("http://localhost:3001/planner", {
+        method: "POST",
+        body: JSON.stringify({ name }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) throw new Error("Fetch Failed");
+      const data = await response.json();
+      // setTask(data);
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -42,6 +61,7 @@ export const Modal = ({ isOpen, close, type, planners }) => {
     if (event.key === "Enter") {
       // TODO: ASADBEK
       // POST PLANNER FUNCTION GOES HERE
+      postPlanner(event.target.value)
       close();
     }
   };
