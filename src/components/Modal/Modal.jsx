@@ -7,7 +7,7 @@ export const Modal = ({ isOpen, close, type, planners }) => {
 
   const postTask = async (task) => {
     try {
-      const response = await fetch("http://localhost:3001/tasks", {
+      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/tasks", {
         method: "POST",
         body: JSON.stringify({ task, plannerId: select }),
         headers: {
@@ -26,7 +26,7 @@ export const Modal = ({ isOpen, close, type, planners }) => {
 
   const postPlanner = async (name) => {
     try {
-      const response = await fetch("http://localhost:3001/planner", {
+      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/planner", {
         method: "POST",
         body: JSON.stringify({ name }),
         headers: {

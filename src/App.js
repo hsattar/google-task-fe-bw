@@ -17,7 +17,7 @@ function App() {
   // FETCHING FOR TASKS - GET
   const getTasks = async () => {
     try {
-      const response = await fetch("http://localhost:3001/tasks");
+      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/tasks");
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setTasks(data);
@@ -32,7 +32,7 @@ function App() {
 
   const getPlanners = async () => {
     try {
-      const response = await fetch("http://localhost:3001/planner");
+      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/planner");
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setPlanners(data);
@@ -43,7 +43,7 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/tasks/${id}`, {
+      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Delete Failed");
