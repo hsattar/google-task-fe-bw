@@ -35,8 +35,7 @@ function App() {
       const response = await fetch("http://localhost:3001/planner");
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
-      setTasks(data);
-      console.log(data);
+      setPlanners(data);
     } catch (error) {
       console.log(error);
     }
