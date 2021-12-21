@@ -13,6 +13,18 @@ function App() {
   const [openPlanner, setOpenPlanner] = useState(false);
   const [selected, setSelected] = useState("");
 
+  // TODO: ROBY
+  // FETCHING FOR TASKS - GET
+
+
+
+  // TODO: ASADBEK
+  // FETCHING FOR PLANNERS - GET
+
+
+  
+  // TODO: ROBY
+  // FETCH FOR SEARCH
 
 
   return (

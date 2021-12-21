@@ -4,22 +4,27 @@ import "./Modal.css";
 export const Modal = ({ isOpen, close, type, planners }) => {
   const [select, setSelect] = useState([]);
   const [task, newTask] = useState("");
+
   const handleAddTask = (event) => {
     console.log(event.key);
     if (event.key === "Enter") {
-      
+      // TODO: MANSI
+      // POST TASFS FUNCTION GOES HERE
       close();
     } else {
       newTask(event.target.value);
     }
   };
+
   const handleAddPlanner = (event) => {
     console.log(event.key);
     if (event.key === "Enter") {
-      
+      // TODO: ASADBEK
+      // POST PLANNER FUNCTION GOES HERE
       close();
     }
   };
+
   return (
     <>
       {type === "task"
