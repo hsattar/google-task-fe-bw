@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { BsJournalPlus } from "react-icons/bs";
@@ -15,44 +15,66 @@ function App() {
 
   // TODO: ROBY
   // FETCHING FOR TASKS - GET
-
-
+  const getTasks = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/tasks");
+      if (!response.ok) throw new Error("Fetch Failed");
+      const data = await response.json();
+      setTasks(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // TODO: ASADBEK
   // FETCHING FOR PLANNERS - GET
 
+  const getPlanners = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/planner");
+      if (!response.ok) throw new Error("Fetch Failed");
+      const data = await response.json();
+      setTasks(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  
   // TODO: ROBY
   // FETCH FOR SEARCH
 
+  useEffect(() => {
+    getTasks();
+    getPlanners();
+  }, []);
 
   return (
     <>
       <div className="app__wrap">
         <img src="/assets/logo.png" alt="logo" />
         <div className="app__header">
-        {selected !== "" && <small>Delete planner</small>}
-        <div className="app__buttons">
-
-          <Dropdown
-            planners={planners}
-            fetchSelPlanner={(tasks, sel) => {
-              setTasks(tasks);
-              setSelected(sel);
-            }}
+          {selected !== "" && <small>Delete planner</small>}
+          <div className="app__buttons">
+            <Dropdown
+              planners={planners}
+              fetchSelPlanner={(tasks, sel) => {
+                setTasks(tasks);
+                setSelected(sel);
+              }}
             />
-          <div className="app__plus" onClick={() => setOpen((op) => !op)}>
-            <HiOutlinePlusSm />
-          </div>
-          <div className="app__plus" onClick={() => setOpenPlanner((op) => !op)}>
-            <BsJournalPlus />
-          </div>
+            <div className="app__plus" onClick={() => setOpen((op) => !op)}>
+              <HiOutlinePlusSm />
             </div>
+            <div className="app__plus" onClick={() => setOpenPlanner((op) => !op)}>
+              <BsJournalPlus />
+            </div>
+          </div>
         </div>
 
         {tasks?.map((task) => {
-          return <SingleTask key={task.id} content={task.content} id={task.id} setDone={()=> {}} />;
+          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={() => {}} />;
         })}
       </div>
       <Modal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} />
