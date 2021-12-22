@@ -1,9 +1,9 @@
 import "./SingleTask.css";
-import { BsCircle, BsCheckCircle, BsFillPencilFill } from "react-icons/bs";
+import { BsCircle, BsCheckCircle, BsFillPencilFill, BsFillTrashFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-export const SingleTask = ({ task, id, setDone, handleChanges }) => {
+export const SingleTask = ({ task, id, setDone, handleChanges, history }) => {
   const { URL } = process.env
   console.log({ task, id });
   const [isChecked, setChecked] = useState(false);
@@ -30,6 +30,20 @@ export const SingleTask = ({ task, id, setDone, handleChanges }) => {
       console.log(error)
     }
   }
+
+  const handleDeletePermanent = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/tasks/${id}/delete`, {
+        method: 'DELETE'
+      })
+      if (!response.ok) throw new Error('Delete Failed')
+      handleChanges()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ 
+
   useEffect(() => {
     if (isChecked) {
       //if the task has been marked as done
@@ -43,6 +57,15 @@ export const SingleTask = ({ task, id, setDone, handleChanges }) => {
 
   return (
     <>
+    {
+      history ? 
+      <div className="single__wrap">
+      
+        <div className="single__content">{task}</div>
+        <div className="single__checkmark" onClick={handleDeletePermanent}>
+          <BsFillTrashFill />
+        </div>
+    </div> :
     <div className="single__wrap">
       <div className="single__checkmark" onClick={() => setChecked((check) => !check)}>
         {!isChecked ? <BsCircle /> : <BsCheckCircle />}
@@ -52,6 +75,7 @@ export const SingleTask = ({ task, id, setDone, handleChanges }) => {
         <BsFillPencilFill />
       </div>
     </div>
+    }
 
     <Modal show={show} onHide={handleClose}>
     <Modal.Body>

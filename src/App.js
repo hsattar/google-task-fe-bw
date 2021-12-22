@@ -168,7 +168,7 @@ function App() {
         }
 
         {tasks?.map((task) => {
-          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} handleChanges={handleChanges}/>;
+          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} handleChanges={handleChanges} history={history}/>;
         })}
       </div>
       <LKModal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} handleChanges={handleChanges}/>
