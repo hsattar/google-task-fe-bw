@@ -83,6 +83,17 @@ function App() {
     }
   }
 
+  // TODO: ROBY SEARCH GOES HERE
+  const hanldeSearhTask = async () => {
+    
+  }
+
+  
+  
+  // TODO: MANSI HISTORY GETCH GOES HERE
+
+
+
   useEffect(() => {
     getTasks();
     getPlanners();
@@ -95,7 +106,15 @@ function App() {
         <div className="app__header">
           {selected !== "" && <small onClick={handleDeletePlanner}>Delete planner</small>}
           {selected !== "" && <small onClick={handleShow}>Edit planner</small>}
-          <p>Search</p>
+          
+          {/* TODO: ROBY SEARCH GOES HERE */}
+          <form onSubmit={hanldeSearhTask}>
+            <input></input>
+          </form>
+
+          {/* TODO: MANSI HISTORY GOES HERE */}
+          <p>hisotry button</p>
+          
           <div className="app__buttons">
             <Dropdown
               planners={planners}
