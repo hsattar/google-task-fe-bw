@@ -22,10 +22,10 @@ function App() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [plannerName, setPlannerName] = useState('')
-
+  const [changes, setChanges] = useState(0)
   const getTasks = async () => {
     try {
-      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks`);
+      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks?task=${search}`);
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setTasks(data);
@@ -88,27 +88,21 @@ function App() {
   // TODO: ROBY SEARCH GOES HERE
   const hanldeSearchTask = async (e) => {
     e.preventDefault()
-    try {
-      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks?tasks=${search}`,)
-      if(response.ok) {
-        const data = await response.json()
-        setSearchresult(data)
-      }throw new Error('Failed to search tasks')
-    } catch (error) {
-      console.log(error)
-    }
+    handleChanges()
   }
 
   
   
   // TODO: MANSI HISTORY GETCH GOES HERE
 
-
+  const handleChanges = () => {
+    setChanges(changes + 1)
+  }
 
   useEffect(() => {
     getTasks();
     getPlanners();
-  }, [selected]);
+  }, [selected, changes]);
 
   return (
     <>
@@ -123,10 +117,10 @@ function App() {
             <input
             type="text"
             placeholder="Search Tasks"
-            value={tasks.search}
-            onChange={(e) => setSearch({ search: e.currentTarget.value})}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             ></input>
-            <Button className="rounded" type="submit" variant="success">Submit</Button>
+            <Button className="rounded" type="submit" variant="success" style={{display: "none"}}>Submit</Button>
           </form>
 
           {/* TODO: MANSI HISTORY GOES HERE */}
