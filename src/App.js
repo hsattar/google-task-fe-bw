@@ -88,10 +88,6 @@ function App() {
     }
   }
 
-  const handleChanges = () => {
-    setChanges(changes + 1)
-  }
-
   // TODO: ROBY SEARCH GOES HERE
   const hanldeSearchTask = async (e) => {
     e.preventDefault()
