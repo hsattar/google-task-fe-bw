@@ -3,7 +3,7 @@ import { BsCircle, BsCheckCircle, BsFillPencilFill, BsFillTrashFill } from "reac
 import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-export const SingleTask = ({ task, id, setDone, handleChanges, history }) => {
+export const SingleTask = ({ task, id, setDone, handleChanges, history, taskPlanner, plannerID }) => {
   const { URL } = process.env
   const [isChecked, setChecked] = useState(false);
 
@@ -11,6 +11,20 @@ export const SingleTask = ({ task, id, setDone, handleChanges, history }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [taskName, setTaskName] = useState(task)
+  const [plannerColors, setPlannerColors] = useState([])
+  const [randomColor, setRandomColor] = useState('')
+
+  const randomColourGenerator = () => {
+    const randomColorRed = Math.floor(Math.random() * 255)
+    const randomColorBlue = Math.floor(Math.random() * 255)
+    const randomColorGreen = Math.floor(Math.random() * 255)
+    setRandomColor(`(${randomColorRed},${randomColorGreen},${randomColorBlue})`)
+  }
+
+
+  useEffect(() => {
+    randomColourGenerator()
+  }, [])
 
   const handleEdit = async e => {
     e.preventDefault()
@@ -40,8 +54,7 @@ export const SingleTask = ({ task, id, setDone, handleChanges, history }) => {
     } catch (error) {
       console.log(error)
     }
-  }
- 
+  } 
 
   useEffect(() => {
     if (isChecked) {
@@ -58,14 +71,14 @@ export const SingleTask = ({ task, id, setDone, handleChanges, history }) => {
     <>
     {
       history ? 
-      <div className="single__wrap">
+      <div className="single__wrap" style={taskPlanner === plannerID[0] ? { backgroundColor: `rgb${randomColor}` } : {backgroundColor: '#b2f7b9'}}>
       
         <div className="single__content">{task}</div>
         <div className="single__checkmark" onClick={handleDeletePermanent}>
           <BsFillTrashFill />
         </div>
     </div> :
-    <div className="single__wrap">
+    <div className="single__wrap" style={taskPlanner === plannerID[0] ? { backgroundColor: `rgb${randomColor}` } : {backgroundColor: '#b2f7b9'}}>
       <div className="single__checkmark" onClick={() => setChecked((check) => !check)}>
         {!isChecked ? <BsCircle /> : <BsCheckCircle />}
       </div>

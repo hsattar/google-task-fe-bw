@@ -12,6 +12,7 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [allTasks, setAllTasks] = useState([])
   const [planners, setPlanners] = useState([]);
+  const [plannerID, setPlannerID] = useState([])
   const [open, setOpen] = useState(false);
   const [openPlanner, setOpenPlanner] = useState(false);
   const [search, setSearch] = useState("")
@@ -57,6 +58,7 @@ function App() {
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setPlanners(data);
+      setPlannerID(data.map(planner => planner.id))
     } catch (error) {
       console.log(error);
     }
@@ -157,8 +159,8 @@ function App() {
           {/* TODO: MANSI HISTORY GOES HERE */}
           {
             history 
-            ? <Button variant="success" onClick={getTasks}>Show Current Tasks</Button>
-            : <Button variant="success" onClick={handleHistory}>Show Completed Tasks</Button>
+            ? <Button variant="success"  className='my-2' onClick={getTasks}>Show Current Tasks</Button>
+            : <Button variant="success" className='my-2'  onClick={handleHistory}>Show Completed Tasks</Button>
 
           }          
           <div className="app__buttons">
@@ -191,15 +193,15 @@ function App() {
         <div className="d-flex">
           {
             page === 0 ? <Button variant='disabled' style={{ display: 'none' }}>Previous</Button> : 
-            <Button className="mx-1 my-2" onClick={() => setPage(page - 1)}>Previous</Button>
+            <Button variant='success' className="mx-1 my-2" onClick={() => setPage(page - 1)}>Previous</Button>
           }
           {
-            allTasks?.length > ((page + 1) * limit) && <Button className="mx-1 my-2" onClick={() => setPage(page + 1)}>Next</Button>
+            allTasks?.length > ((page + 1) * limit) && <Button variant='success' className="mx-1 my-2" onClick={() => setPage(page + 1)}>Next</Button>
           }
         </div>
 
         {tasks?.map((task) => {
-          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} handleChanges={handleChanges} history={history}/>;
+          return <SingleTask key={task.id} task={task.task} id={task.id} taskPlanner={task.plannerId} setDone={(id) => handleDelete(id)} handleChanges={handleChanges} history={history} plannerID={plannerID}/>;
         })}
       </div>
       <LKModal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} handleChanges={handleChanges}/>
