@@ -95,6 +95,7 @@ function App() {
         <div className="app__header">
           {selected !== "" && <small onClick={handleDeletePlanner}>Delete planner</small>}
           {selected !== "" && <small onClick={handleShow}>Edit planner</small>}
+          <p>Search</p>
           <div className="app__buttons">
             <Dropdown
               planners={planners}
