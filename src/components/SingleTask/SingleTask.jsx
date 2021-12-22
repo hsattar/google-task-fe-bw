@@ -3,7 +3,7 @@ import { BsCircle, BsCheckCircle, BsFillPencilFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-export const SingleTask = ({ task, id, setDone }) => {
+export const SingleTask = ({ task, id, setDone, handleChanges }) => {
   console.log({ task, id });
   const [isChecked, setChecked] = useState(false);
 
@@ -23,6 +23,7 @@ export const SingleTask = ({ task, id, setDone }) => {
         }
       })
       if (!response.ok) throw new Error('Edit Failed')
+      handleChanges()
       handleClose()
     } catch (error) {
       console.log(error)
@@ -31,9 +32,9 @@ export const SingleTask = ({ task, id, setDone }) => {
   useEffect(() => {
     if (isChecked) {
       //if the task has been marked as done
-      setTimeout(() => {
+      // setTimeout(() => {
       setDone(id);
-      }, 500);
+      // }, 500);
       console.log("isChecked");
       // setChecked(!isChecked)
     }
