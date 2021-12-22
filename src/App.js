@@ -10,6 +10,7 @@ import { Modal, Button } from 'react-bootstrap'
 function App() {
   const URL = process.env.URL
   const [tasks, setTasks] = useState([]);
+  const [allTasks, setAllTasks] = useState([])
   const [planners, setPlanners] = useState([]);
   const [open, setOpen] = useState(false);
   const [openPlanner, setOpenPlanner] = useState(false);
@@ -24,14 +25,27 @@ function App() {
   const handleShow = () => setShow(true);
   const [plannerName, setPlannerName] = useState('')
   const [changes, setChanges] = useState(0)
+  const [page, setPage] = useState(0)
+  const [limit, setLimit] = useState(3)
+
+  const getAllTasks = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/tasks`);
+      if (!response.ok) throw new Error("Fetch Failed");
+      const data = await response.json();
+      setAllTasks(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getTasks = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/tasks?task=${search}&planner=${selected}`);
+      const response = await fetch(`http://localhost:3001/tasks?task=${search}&planner=${selected}&page=${page}&limit=${limit}`);
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setTasks(data);
       setHistory(false)
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +132,8 @@ function App() {
   useEffect(() => {
     getTasks();
     getPlanners();
-  }, [selected, changes]);
+    getAllTasks()
+  }, [selected, changes, page, limit]);
 
   return (
     <>
@@ -166,6 +181,22 @@ function App() {
         {
           history ? <p>Completed Tasks:</p> : <p>Tasks still to do:</p>
         }
+
+        <select value={limit} onChange={(e) => setLimit(e.target.value)}>
+          <option>1</option>
+          <option>3</option>
+          <option>5</option>
+        </select>
+
+        <div className="d-flex">
+          {
+            page === 0 ? <Button variant='disabled' style={{ display: 'none' }}>Previous</Button> : 
+            <Button className="mx-1 my-2" onClick={() => setPage(page - 1)}>Previous</Button>
+          }
+          {
+            allTasks?.length > ((page + 1) * limit) && <Button className="mx-1 my-2" onClick={() => setPage(page + 1)}>Next</Button>
+          }
+        </div>
 
         {tasks?.map((task) => {
           return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} handleChanges={handleChanges} history={history}/>;

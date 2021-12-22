@@ -47,7 +47,7 @@ export const Modal = ({ isOpen, close, type, planners, handleChanges }) => {
 
   const handleAddTask = (event) => {
     // console.log(event.key);
-    console.log(event);
+    // console.log(event);
 
     if (event.key === "Enter") {
       // TODO: MANSI

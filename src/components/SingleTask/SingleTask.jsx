@@ -5,7 +5,6 @@ import { Modal, Button } from "react-bootstrap";
 
 export const SingleTask = ({ task, id, setDone, handleChanges, history }) => {
   const { URL } = process.env
-  console.log({ task, id });
   const [isChecked, setChecked] = useState(false);
 
   const [show, setShow] = useState(false);
