@@ -12,6 +12,8 @@ function App() {
   const [planners, setPlanners] = useState([]);
   const [open, setOpen] = useState(false);
   const [openPlanner, setOpenPlanner] = useState(false);
+  const [search, setSearch] = useState("")
+  const [searchResult, setSearchresult] = ([])
   
   // SELECTED BELOW MEANS THE PLANNER ID
   const [selected, setSelected] = useState("");
@@ -84,8 +86,17 @@ function App() {
   }
 
   // TODO: ROBY SEARCH GOES HERE
-  const hanldeSearhTask = async () => {
-    
+  const hanldeSearchTask = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks?tasks=${search}`,)
+      if(response.ok) {
+        const data = await response.json()
+        setSearchresult(data)
+      }throw new Error('Failed to search tasks')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   
@@ -108,8 +119,14 @@ function App() {
           {selected !== "" && <small onClick={handleShow}>Edit planner</small>}
           
           {/* TODO: ROBY SEARCH GOES HERE */}
-          <form onSubmit={hanldeSearhTask}>
-            <input></input>
+          <form onSubmit={hanldeSearchTask}>
+            <input
+            type="text"
+            placeholder="Search Tasks"
+            value={tasks.search}
+            onChange={(e) => setSearch({ search: e.currentTarget.value})}
+            ></input>
+            <Button className="rounded" type="submit" variant="success">Submit</Button>
           </form>
 
           {/* TODO: MANSI HISTORY GOES HERE */}
