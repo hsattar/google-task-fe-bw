@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Modal.css";
 
-export const Modal = ({ isOpen, close, type, planners }) => {
+export const Modal = ({ isOpen, close, type, planners, handleChanges }) => {
   const [select, setSelect] = useState(null);
   const [task, setTask] = useState([]);
 
@@ -17,6 +17,7 @@ export const Modal = ({ isOpen, close, type, planners }) => {
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setTask(data);
+      handleChanges()
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -36,6 +37,7 @@ export const Modal = ({ isOpen, close, type, planners }) => {
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       // setTask(data);
+      handleChanges()
       console.log(data);
     } catch (error) {
       console.log(error);

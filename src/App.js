@@ -20,6 +20,7 @@ function App() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [plannerName, setPlannerName] = useState('')
+  const [changes, setChanges] = useState(0)
 
   const getTasks = async () => {
     try {
@@ -50,6 +51,7 @@ function App() {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Delete Failed");
+      handleChanges()
     } catch (error) {
       console.log(error);
     }
@@ -61,6 +63,7 @@ function App() {
         method: 'DELETE'
       })
       if (!response.ok) throw new Error('Delete Failed')
+      handleChanges()
     } catch (error) {
       console.log(error)
     }
@@ -77,15 +80,20 @@ function App() {
         }
       })
       if (!response.ok) throw new Error('Delete Failed')
+      handleChanges()
       handleClose()
     } catch (error) {
       console.log(error)
     }
   }
 
+  const handleChanges = () => {
+    setChanges(changes + 1)
+  }
+
   // TODO: ROBY SEARCH GOES HERE
   const hanldeSearhTask = async () => {
-    
+
   }
 
   
@@ -97,7 +105,7 @@ function App() {
   useEffect(() => {
     getTasks();
     getPlanners();
-  }, [selected]);
+  }, [selected, changes]);
 
   return (
     <>
@@ -133,11 +141,11 @@ function App() {
         </div>
 
         {tasks?.map((task) => {
-          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} />;
+          return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} handleChanges={handleChanges}/>;
         })}
       </div>
-      <LKModal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} />
-      <LKModal type="planner" isOpen={openPlanner} close={() => setOpenPlanner(false)} />
+      <LKModal type="task" planners={planners} isOpen={open} close={() => setOpen(false)} handleChanges={handleChanges}/>
+      <LKModal type="planner" isOpen={openPlanner} close={() => setOpenPlanner(false)} handleChanges={handleChanges}/>
 
       <Modal show={show} onHide={handleClose}>
       <Modal.Body>
