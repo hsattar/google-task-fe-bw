@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 export const SingleTask = ({ task, id, setDone, handleChanges }) => {
+  const { URL } = process.env
   console.log({ task, id });
   const [isChecked, setChecked] = useState(false);
 
@@ -15,7 +16,7 @@ export const SingleTask = ({ task, id, setDone, handleChanges }) => {
   const handleEdit = async e => {
     e.preventDefault()
     try {
-      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks/${id}`, {
+      const response = await fetch(`http://localhost:3001/tasks/${id}`, {
         method: 'PUT',
         body: JSON.stringify({ task: taskName}),
         headers: {

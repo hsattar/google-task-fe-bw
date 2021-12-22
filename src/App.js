@@ -8,12 +8,13 @@ import { Modal as LKModal } from "./components/Modal/Modal";
 import { Modal, Button } from 'react-bootstrap'
 
 function App() {
+  const URL = process.env.URL
   const [tasks, setTasks] = useState([]);
   const [planners, setPlanners] = useState([]);
   const [open, setOpen] = useState(false);
   const [openPlanner, setOpenPlanner] = useState(false);
   const [search, setSearch] = useState("")
-  const [searchResult, setSearchresult] = ([])
+  const [history, setHistory] = useState(false)
   
   // SELECTED BELOW MEANS THE PLANNER ID
   const [selected, setSelected] = useState("");
@@ -25,10 +26,11 @@ function App() {
   const [changes, setChanges] = useState(0)
   const getTasks = async () => {
     try {
-      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks?task=${search}`);
+      const response = await fetch(`http://localhost:3001/tasks?task=${search}&planner=${selected}`);
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setTasks(data);
+      setHistory(false)
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -37,7 +39,7 @@ function App() {
 
   const getPlanners = async () => {
     try {
-      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/planner");
+      const response = await fetch(`http://localhost:3001/planner`);
       if (!response.ok) throw new Error("Fetch Failed");
       const data = await response.json();
       setPlanners(data);
@@ -48,7 +50,7 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/tasks/${id}`, {
+      const response = await fetch(`http://localhost:3001/tasks/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Delete Failed");
@@ -60,7 +62,7 @@ function App() {
 
   const handleDeletePlanner = async () => {
     try {
-      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/planner/${selected}`, {
+      const response = await fetch(`http://localhost:3001/planner/${selected}`, {
         method: 'DELETE'
       })
       if (!response.ok) throw new Error('Delete Failed')
@@ -73,7 +75,7 @@ function App() {
   const handleEditPlanner = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch(`https://m6b1tasks-planner-api.herokuapp.com/planner/${selected}`, {
+      const response = await fetch(`http://localhost:3001/planner/${selected}`, {
         method: 'PUT',
         body: JSON.stringify({ name: plannerName}),
         headers: {
@@ -97,6 +99,17 @@ function App() {
   
   
   // TODO: MANSI HISTORY GETCH GOES HERE
+  const handleHistory = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/tasks/history`)
+      if (!response.ok) throw new Error("Fetch Failed");
+      const data = await response.json();
+      setTasks(data);
+      setHistory(true)
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleChanges = () => {
     setChanges(changes + 1)
@@ -127,8 +140,12 @@ function App() {
           </form>
 
           {/* TODO: MANSI HISTORY GOES HERE */}
-          <p>hisotry button</p>
-          
+          {
+            history 
+            ? <Button variant="success" onClick={getTasks}>Show Current Tasks</Button>
+            : <Button variant="success" onClick={handleHistory}>Show Completed Tasks</Button>
+
+          }          
           <div className="app__buttons">
             <Dropdown
               planners={planners}
@@ -145,6 +162,10 @@ function App() {
             </div>
           </div>
         </div>
+          
+        {
+          history ? <p>Completed Tasks:</p> : <p>Tasks still to do:</p>
+        }
 
         {tasks?.map((task) => {
           return <SingleTask key={task.id} task={task.task} id={task.id} setDone={(id) => handleDelete(id)} handleChanges={handleChanges}/>;

@@ -2,12 +2,13 @@ import { useState } from "react";
 import "./Modal.css";
 
 export const Modal = ({ isOpen, close, type, planners, handleChanges }) => {
+  const { URL } = process.env
   const [select, setSelect] = useState(null);
   const [task, setTask] = useState([]);
 
   const postTask = async (task) => {
     try {
-      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/tasks", {
+      const response = await fetch(`http://localhost:3001/tasks`, {
         method: "POST",
         body: JSON.stringify({ task, plannerId: select }),
         headers: {
@@ -27,7 +28,7 @@ export const Modal = ({ isOpen, close, type, planners, handleChanges }) => {
 
   const postPlanner = async (name) => {
     try {
-      const response = await fetch("https://m6b1tasks-planner-api.herokuapp.com/planner", {
+      const response = await fetch(`http://localhost:3001/planner`, {
         method: "POST",
         body: JSON.stringify({ name }),
         headers: {
